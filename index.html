@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Ranmal</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        .navbar {
+            background: url('images/home_00.png') no-repeat center center/cover;
+            height: 75vh;
+            padding-right: 15px;
+            padding-left: 15px;
+            padding-top: 15px;
+        }
+        .navdiv {
+            display: flex;
+            align-items: center; 
+            justify-content: space-between;
+            margin-left: 70svw;
+        }
+        li {
+            list-style: none;
+            display: inline-block;
+        }
+        li a {
+            color: white;
+            font-size: 18px;
+            margin-right: 25px;
+            text-decoration: none;
+        }
+        h1 {
+            color: white;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .booking-form {
+            margin-top: 10px;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 70%;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #0073e6;
+        }
+        .guests {
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #0073e6;
+            cursor: pointer;
+            border: 1px solid #0073e6;
+        }
+        .check-btn {
+            background-color: #0073e6;  
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #ffffff;
+            cursor: pointer;
+            border: none;
+            
+        }
+
+        .radio-button {
+        display: inline-block;
+        }
+        /* Hide the actual radio inputs */
+        .radio-button input[type="radio"] {
+        display: none;
+        }
+        /* Style the labels as buttons */
+        .radio-button label {
+        padding: 10px 20px;
+        border: 1px solid #007BFF;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-right: -1px; /* To avoid double borders */
+        background-color: #f9f9f9;
+        color: #0073e6;
+        transition: background-color 0.3s;
+        width: 50px;
+        }
+        /* Style for the checked state */
+        .radio-button input[type="radio"]:checked + label {
+        background-color: #007BFF;
+        color: white;
+        border-color: #007BFF;
+        }
+        /* Optional: hover effect */
+        .radio-button label:hover {
+        background-color: #e0e0e0;
+        }
+
+         a{
+            text-decoration: none;
+        }
+        .date{
+            cursor: pointer;
+        }
+        
+        /* Popup styling */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup {
+            background: white;
+            width: 453px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .table th, .table td {
+            padding: 10px;
+            text-align: center;
+        }
+        .counter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .counter-btn {
+            border: 1px solid #000;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .buttons {
+            display: flex;
+            justify-content: right;
+            gap: 20px;
+        }
+        .done-btn, .cancel-btn {
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .done-btn {
+            background-color: #0073e6;
+            color: white;
+            border: none;
+        }
+        .cancel-btn {
+            border: 1px solid #0073e6;
+            color: #0073e6;
+            background: white;
+        }
+        .wrapper{
+        height: 30px;
+        width: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #FFF;
+        border-radius: 12px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        .wrapper span{
+        width: 100%;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+        }
+        .wrapper span.num{
+        font-size: 20px;
+        border-right: 2px solid rgba(0,0,0,0.2);
+        border-left: 2px solid rgba(0,0,0,0.2);
+        pointer-events: none;
+        }
+        .add-room {
+            color: #0073e6;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .add-room:hover {
+            text-decoration: underline;
+        }
+        .remove-room {
+            color: #ff0000;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .remove-room:hover {
+            text-decoration: underline;
+        }
+
+        .promotion{
+            float: right;
+        }
+        .promo-btn{
+            transform: skew(0deg, -15deg);
+            font-weight: 600;
+            border: 0px;   
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            padding: 15px 25px;
+            cursor: pointer;
+            background: linear-gradient(45deg, #ff6b6b, #ffc600);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-btn:hover {
+            transform: skew(0deg, -15deg) translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ffc600, #ff6b6b);
+        }
+
+        .promo-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .promo-btn:hover::before {
+            left: 100%;
+        }
+
+        .promo-btn br {
+            display: block;
+            margin: 5px 0;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 198, 0, 0.5),
+                           0 0 10px rgba(255, 198, 0, 0.3),
+                           0 0 15px rgba(255, 198, 0, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 10px rgba(255, 198, 0, 0.8),
+                           0 0 20px rgba(255, 198, 0, 0.5),
+                           0 0 30px rgba(255, 198, 0, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(255, 198, 0, 0.5),
+                           0 0 10px rgba(255, 198, 0, 0.3),
+                           0 0 15px rgba(255, 198, 0, 0.2);
+            }
+        }
+
+        .promo-btn {
+            animation: glow 2s infinite;
+        }
+
+        /* Promotion Popup Styles */
+        .promo-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .promo-popup {
+            background: #0073e6b3;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            animation: popupFadeIn 0.3s ease-out;
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .promo-popup h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .promo-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .promo-item {
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .promo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .promo-item h3 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 25px;
+        }
+
+        .promo-item p {
+            color: #ff8989;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .promo-popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #ff0000;
+            cursor: pointer;
+            transition: color 0.2s;
+            background-color: rgba(255, 255, 255, 0.542);
+            width: 30px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .promo-popup .close-btn:hover {
+            color: #ffffff;
+            background-color: rgb(255, 0, 0);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="navdiv">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="room.php">Rooms</a></li>
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">Info</a></li>
+                </ul>
+            </div>
+            <h1>Hotel Moon</h1>
+        </div>
+        
+        <div class="booking-form" id="bookingForm">
+            <div class="date" id="checkInDate">
+                <p>MAR<br><strong>14</strong><br>FRI</p>
+                <input type="date" id="checkInInput" style="display: none;">
+            </div>
+            <div class="date" id="checkOutDate">
+                <p>MAR<br><strong>15</strong><br>FRI</p>
+                <input type="date" id="checkOutInput" style="display: none;">
+            </div>
+
+            <div class="radio-buttons">
+                <div class="radio-button">
+                  <input type="radio" id="btn1" name="option" checked>
+                  <label for="btn1">Room Only</label>
+                </div>
+                <div class="radio-button">
+                  <input type="radio" id="btn2" name="option">
+                  <label for="btn2">Bed and Breakfast</label>
+                </div>
+                <div class="radio-button">
+                  <input type="radio" id="btn3" name="option">
+                  <label for="btn3">Half Board</label>
+                </div>
+                <div class="radio-button">
+                    <input type="radio" id="btn4" name="option">
+                    <label for="btn4">Full Board</label>
+                  </div>
+              </div>
+
+            <div class="guests" id="openPopup" type="button">1 Room, 1 Guest</div>
+            <a class="check-btn" id="checkRoomsBtn">Check Rooms And Rates</a>  
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup">
+            <h2>Rooms and Guests</h2>
+            <table class="table" id="roomsTable">
+                <thead>
+                    <tr>
+                        <th>Rooms</th>
+                        <th>Adults (18+)</th>
+                        <th>Kids</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-room-id="1">
+                        <td>Room 1</td>
+                        <td>
+                            <div class="counter">
+                                <div class="counter-btn decrease-adults">-</div>
+                                <span class="adults-count">1</span>
+                                <div class="counter-btn increase-adults">+</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="counter">
+                                <div class="counter-btn decrease-kids">-</div>
+                                <span class="kids-count">0</span>
+                                <div class="counter-btn increase-kids">+</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="3" class="add-room" id="addRoomBtn">+ Add Room</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="buttons">
+                <button class="done-btn" id="doneBtn">Done</button>
+                <button class="cancel-btn" id="cancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="promotion">
+        <button class="promo-btn">Today's <br> Promotions</button>
+    </div>
+
+    <!-- Promotion Popup -->
+    <div class="promo-popup-overlay" id="promoPopupOverlay">
+        <div class="promo-popup">
+            <span class="close-btn" id="closePromoPopup">&times;</span>
+            <h2>Today's Special Promotions</h2>
+            <div class="promo-content" id="promoContent">
+                <!-- Promotions will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const popupOverlay = document.getElementById('popupOverlay');
+        const openPopupBtn = document.getElementById('openPopup');
+        const roomsTable = document.getElementById('roomsTable');
+        const addRoomBtn = document.getElementById('addRoomBtn');
+        const doneBtn = document.getElementById('doneBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        let roomCount = 1;
+        
+        // Date elements
+        const checkInDate = document.getElementById('checkInDate');
+        const checkOutDate = document.getElementById('checkOutDate');
+        const checkInInput = document.getElementById('checkInInput');
+        const checkOutInput = document.getElementById('checkOutInput');
+
+        // Get today's date and tomorrow's date
+        const today = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+
+        // Format date as YYYY-MM-DD for input fields
+        const formatDate = (date) => date.toISOString().split("T")[0];
+
+        // Set default values on page load
+        checkInInput.value = formatDate(today);
+        checkOutInput.value = formatDate(tomorrow);
+        checkInInput.min = formatDate(today);
+        checkOutInput.min = formatDate(tomorrow);
+
+        // Update UI display with default dates
+        updateDateDisplay(checkInDate, today);
+        updateDateDisplay(checkOutDate, tomorrow);
+
+        // Open date picker on click
+        checkInDate.addEventListener('click', () => checkInInput.showPicker());
+        checkOutDate.addEventListener('click', () => checkOutInput.showPicker());
+
+        // Handle check-in date change
+        checkInInput.addEventListener('change', () => {
+            const checkInValue = new Date(checkInInput.value);
+
+            // Ensure check-in date is not later than check-out
+            if (new Date(checkOutInput.value) <= checkInValue) {
+                checkOutInput.value = formatDate(new Date(checkInValue.setDate(checkInValue.getDate() + 1)));
+            }
+
+            checkOutInput.min = checkOutInput.value; // Set check-out min date
+            updateDateDisplay(checkInDate, new Date(checkInInput.value));
+        });
+
+        // Handle check-out date change
+        checkOutInput.addEventListener('change', () => {
+            const checkOutValue = new Date(checkOutInput.value);
+            const checkInValue = new Date(checkInInput.value);
+
+            // Prevent check-out date from being before check-in
+            if (checkOutValue <= checkInValue) {
+                alert("Check-out date must be after Check-in date.");
+                checkOutInput.value = formatDate(new Date(checkInValue.setDate(checkInValue.getDate() + 1)));
+            }
+
+            updateDateDisplay(checkOutDate, new Date(checkOutInput.value));
+        });
+
+        // Function to update UI display for selected dates
+        function updateDateDisplay(element, date) {
+            const options = { month: 'short', day: 'numeric', weekday: 'short' };
+            const formattedDate = date.toLocaleDateString('en-US', options).toUpperCase();
+            const [weekday, month, day] = formattedDate.split(' ');
+
+            element.querySelector('p').innerHTML = `${month}<br><strong>${day}</strong><br>${weekday}`;
+        }
+
+        // Open popup
+        openPopupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            popupOverlay.style.display = 'flex';
+        });
+
+        // Add new room
+        addRoomBtn.addEventListener('click', function() {
+            if (roomCount < 5) { // Limit to 5 rooms max
+                roomCount++;
+                const newRow = document.createElement('tr');
+                newRow.setAttribute('data-room-id', roomCount);
+                
+                newRow.innerHTML = `
+                    <td>Room ${roomCount} <span class="remove-room">×</span></td>
+                    <td>
+                        <div class="counter">
+                            <div class="counter-btn decrease-adults">-</div>
+                            <span class="adults-count">1</span>
+                            <div class="counter-btn increase-adults">+</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="counter">
+                            <div class="counter-btn decrease-kids">-</div>
+                            <span class="kids-count">0</span>
+                            <div class="counter-btn increase-kids">+</div>
+                        </div>
+                    </td>
+                `;
+                
+                // Add the new row before the "+ Add Room" row
+                const tbody = roomsTable.querySelector('tbody');
+                tbody.appendChild(newRow);
+                
+                // Add event listener to remove button
+                const removeBtn = newRow.querySelector('.remove-room');
+                removeBtn.addEventListener('click', function() {
+                    removeRoom(newRow);
+                });
+                
+                // Initialize counter listeners for the new room
+                initCounterListeners(newRow);
+            } else {
+                alert("Maximum 5 rooms allowed.");
+            }
+        });
+
+        // Remove a room
+        function removeRoom(roomRow) {
+            roomRow.remove();
+            roomCount--;
+            
+            // Renumber the remaining rooms
+            const roomRows = roomsTable.querySelectorAll('tbody tr');
+            roomRows.forEach((row, index) => {
+                const roomNum = index + 1;
+                row.setAttribute('data-room-id', roomNum);
+                const roomCell = row.querySelector('td:first-child');
+                
+                // Keep the remove button if it exists
+                if (roomNum > 1) {
+                    roomCell.innerHTML = `Room ${roomNum} <span class="remove-room">×</span>`;
+                    
+                    // Re-attach event listener to new remove button
+                    const removeBtn = roomCell.querySelector('.remove-room');
+                    removeBtn.addEventListener('click', function() {
+                        removeRoom(row);
+                    });
+                } else {
+                    roomCell.textContent = `Room ${roomNum}`;
+                }
+            });
+        }
+
+        // Initialize counter listeners for a specific row
+        function initCounterListeners(row) {
+            // Adults counter
+            const increaseAdults = row.querySelector('.increase-adults');
+            const decreaseAdults = row.querySelector('.decrease-adults');
+            const adultsCount = row.querySelector('.adults-count');
+            
+            increaseAdults.addEventListener('click', function() {
+                let count = parseInt(adultsCount.innerText);
+                if (count < 3) {
+                    adultsCount.innerText = count + 1;
+                }
+            });
+            
+            decreaseAdults.addEventListener('click', function() {
+                let count = parseInt(adultsCount.innerText);
+                if (count > 1) {
+                    adultsCount.innerText = count - 1;
+                }
+            });
+            
+            // Kids counter
+            const increaseKids = row.querySelector('.increase-kids');
+            const decreaseKids = row.querySelector('.decrease-kids');
+            const kidsCount = row.querySelector('.kids-count');
+            
+            increaseKids.addEventListener('click', function() {
+                let count = parseInt(kidsCount.innerText);
+                if (count < 2) {
+                    kidsCount.innerText = count + 1;
+                }
+            });
+            
+            decreaseKids.addEventListener('click', function() {
+                let count = parseInt(kidsCount.innerText);
+                if (count > 0) {
+                    kidsCount.innerText = count - 1;
+                }
+            });
+        }
+
+        // Initialize counter listeners for the first room
+        initCounterListeners(document.querySelector('tr[data-room-id="1"]'));
+
+        // Close popup with done button
+        doneBtn.addEventListener('click', function() {
+            updateGuestSummary();
+            popupOverlay.style.display = 'none';
+        });
+
+        // Close popup with cancel button
+        cancelBtn.addEventListener('click', function() {
+            popupOverlay.style.display = 'none';
+        });
+
+        // Update guest summary text
+        function updateGuestSummary() {
+            const roomRows = roomsTable.querySelectorAll('tbody tr');
+            let totalAdults = 0;
+            let totalKids = 0;
+            
+            roomRows.forEach(row => {
+                totalAdults += parseInt(row.querySelector('.adults-count').innerText);
+                totalKids += parseInt(row.querySelector('.kids-count').innerText);
+            });
+            
+            const totalGuests = totalAdults + totalKids;
+            openPopupBtn.innerText = `${roomCount} Room${roomCount > 1 ? 's' : ''}, ${totalGuests} Guest${totalGuests > 1 ? 's' : ''}`;
+        }
+
+        const radioButtons = document.querySelectorAll('input[name="option"]');
+        let selectedBoardOption = "Room Only"; // Default value
+
+        // Add event listeners to track which board option is selected
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    // Get the text from the label
+                    const label = document.querySelector(`label[for="${this.id}"]`);
+                    selectedBoardOption = label.textContent;
+                }
+            });
+        });
+
+        // Pass the data for room.php
+        document.getElementById('checkRoomsBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Check if a board option is selected
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (!selectedOption) {
+                alert('Please select a board option (Room Only, Bed and Breakfast, Half Board, or Full Board)');
+                return;
+            }
+
+            // Collect data from inputs and popup
+            const checkIn = checkInInput.value;
+            const checkOut = checkOutInput.value;
+            
+            // Create an array to store room data
+            const roomsData = [];
+            const roomRows = roomsTable.querySelectorAll('tbody tr');
+            
+            roomRows.forEach(row => {
+                const adults = parseInt(row.querySelector('.adults-count').innerText);
+                const kids = parseInt(row.querySelector('.kids-count').innerText);
+                
+                roomsData.push({
+                    adults: adults,
+                    kids: kids
+                });
+            });
+
+            // Construct URL with parameters
+            const params = new URLSearchParams({
+                checkin: checkIn,
+                checkout: checkOut,
+                rooms: roomCount,
+                board_option: selectedBoardOption
+            });
+            
+            // Add room details to params
+            roomsData.forEach((room, index) => {
+                params.append(`room${index+1}_adults`, room.adults);
+                params.append(`room${index+1}_kids`, room.kids);
+            });
+
+            // Redirect to room.php with the parameters
+            window.location.href = `room.php?${params.toString()}`;
+        });
+
+        // Function to fetch and display promotions
+        function loadPromotions() {
+            fetch('get_promotions.php')
+                .then(response => response.json())
+                .then(promotions => {
+                    const promoContent = document.getElementById('promoContent');
+                    promoContent.innerHTML = ''; // Clear existing content
+                    
+                    promotions.forEach(promo => {
+                        const promoItem = document.createElement('div');
+                        promoItem.className = 'promo-item';
+                        promoItem.innerHTML = `<h3>${promo}</h3>`;
+                        promoContent.appendChild(promoItem);
+                    });
+                })
+                .catch(error => console.error('Error loading promotions:', error));
+        }
+
+        // Load promotions when the page loads
+        document.addEventListener('DOMContentLoaded', loadPromotions);
+
+        // Promotion popup functionality
+        const promoBtn = document.querySelector('.promo-btn');
+        const promoPopupOverlay = document.getElementById('promoPopupOverlay');
+        const closePromoBtn = document.getElementById('closePromoPopup');
+
+        promoBtn.addEventListener('click', () => {
+            loadPromotions(); // Reload promotions when opening the popup
+            promoPopupOverlay.style.display = 'flex';
+        });
+
+        closePromoBtn.addEventListener('click', () => {
+            promoPopupOverlay.style.display = 'none';
+        });
+
+        // Close promotion popup when clicking outside
+        promoPopupOverlay.addEventListener('click', (e) => {
+            if (e.target === promoPopupOverlay) {
+                promoPopupOverlay.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
